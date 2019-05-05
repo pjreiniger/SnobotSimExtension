@@ -1,0 +1,14 @@
+
+// Publshing Information
+ext.maven_publishing_path = "$rootDir/build/maven_repo/"
+
+ext.maven_version = "2019-1.2.0"
+if(hasProperty('maven_version'))
+{
+    ext.maven_version = maven_version
+}
+
+wrapper {
+    gradleVersion = '5.0'
+}
+
