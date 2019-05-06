@@ -1,0 +1,17 @@
+{
+  "name": "snobot_sim_standalone",
+  "version": "0.0.0",
+  "description": "SnobotSim setup utility",
+  "main": "index.js",
+  "scripts": {
+    "compile": "tsc -p ./",
+    "clean": "rmdir-cli out",
+    "start": "npm run compile && electron ./out/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pjreiniger/SnobotSimExtension"
+  },
+  "author": "pjreiniger",
+  "license": "MIT"
+}
