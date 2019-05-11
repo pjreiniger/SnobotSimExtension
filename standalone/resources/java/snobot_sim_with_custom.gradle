@@ -1,4 +1,13 @@
 
+sourceSets {
+    simulatorExtensions
+    {
+        java {
+            srcDirs += ["src/custom_simulator/java"]
+        }
+    }
+}
+
 dependencies {
     snobotSimCompile snobotSimJava()
 
