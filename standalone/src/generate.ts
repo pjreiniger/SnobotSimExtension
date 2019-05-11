@@ -1,22 +1,21 @@
 import * as electron from 'electron';
 import * as fs from 'fs';
+import * as mkdirp from 'mkdirp';
 import * as ncp from 'ncp';
 import * as path from 'path';
-import * as mkdirp from 'mkdirp';
-
 
 const remote = electron.remote;
 const dialog = remote.dialog;
 
-function copyFile(source: string, dest: string) : Promise<void> {
-	return new Promise<void>((resolve, reject) => {
+function copyFile(source: string, dest: string): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
       ncp.ncp(source, dest, {}, (err) => {
         if (err) {
           reject(err);
         }
         resolve();
       });
-    })
+    });
 }
 
 function writeFile(filename: string, contents: string): Promise<void> {
@@ -31,7 +30,7 @@ function writeFile(filename: string, contents: string): Promise<void> {
   });
 }
 
-function makedir(directory : string) : Promise<void> {
+function makedir(directory: string): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     mkdirp(directory, (err) => {
       if (err) {
@@ -43,7 +42,7 @@ function makedir(directory : string) : Promise<void> {
   });
 }
 
-function readFile(filename : string) : Promise<string> {
+function readFile(filename: string): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     fs.readFile(filename, 'utf8', (err, data) => {
       if (err) {
@@ -55,7 +54,7 @@ function readFile(filename : string) : Promise<string> {
   });
 }
 
-function exists(filename : string) : Promise<boolean> {
+function exists(filename: string): Promise<boolean> {
   return new Promise<boolean>((resolve) => {
     fs.exists(filename, (e) => {
       resolve(e);
@@ -78,10 +77,12 @@ function getCleanedJavaDependenciesRegex() {
 async function updateBuildFile(projectFolder: string) {
     const buildFile = path.join(projectFolder, 'build.gradle');
     const snobotSimPluginText = '\n    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-3.0.0" apply false';
+    // tslint:disable-next-line
     const snobotSimJavaApplyPlugin = '//////////////////////////////////\n// SnobotSim\n//////////////////////////////////\napply plugin: com.snobot.simulator.plugin.SnobotSimulatorPlugin\napply from: "snobotsim/snobot_sim.gradle"\n//////////////////////////////////\n\n';
-    const gradleBuildFile = await readFile(buildFile)
+    const gradleBuildFile = await readFile(buildFile);
     let newgFile = gradleBuildFile.replace(getGradleRioRegex(), `$1${snobotSimPluginText}`);
 
+    // tslint:disable-next-line
     if (gradleBuildFile.search(getDefaultJavaDependenciesRegex()) !== -1) {
         newgFile = newgFile.replace(getDefaultJavaDependenciesRegex(), `${snobotSimJavaApplyPlugin}$1`);
     } else  {
@@ -91,11 +92,10 @@ async function updateBuildFile(projectFolder: string) {
     await writeFile(buildFile, newgFile);
 }
 
-async function setupSnobotSimFiles(projectFolder : string, toFolder : string) {
-  //const enable_custom_sim_element = document.getElementById('enable_custom_sim') as HTMLInputElement
-  const use_vscode = (document.getElementById('use_vscode') as HTMLInputElement).checked
-  const use_eclipse = (document.getElementById('use_eclipse') as HTMLInputElement).checked
-  const use_intellij = (document.getElementById('use_intellij') as HTMLInputElement).checked
+async function setupSnobotSimFiles(projectFolder: string, toFolder: string) {
+  const useVsCode = (document.getElementById('use_vscode') as HTMLInputElement).checked;
+  const useEclipse = (document.getElementById('use_eclipse') as HTMLInputElement).checked;
+  const useIntellij = (document.getElementById('use_intellij') as HTMLInputElement).checked;
 
   const configDir = path.join(projectFolder, 'simulator_config');
 
@@ -115,6 +115,9 @@ async function setupSnobotSimFiles(projectFolder : string, toFolder : string) {
   // Read the wpilib settings to figure out the project type
   const wpilibConfig = JSON.parse(await readFile(jsonFilePath));
 
+  // tslint:disable-next-line
+  const wpilibLanguage = wpilibConfig.currentLanguage as string;
+
   // Get the resource paths to copy
   const basepath = electron.remote.app.getAppPath();
   let resourceRoot = path.join(basepath, 'resources');
@@ -125,53 +128,57 @@ async function setupSnobotSimFiles(projectFolder : string, toFolder : string) {
   // Copy common things
   const snobotSimPluginConfig = path.join(resourceRoot, 'shared', 'SnobotSim.json');
   const snobotSimGuiConfig = path.join(resourceRoot, 'shared', 'simulator_config.yml');
-  await copyFile(snobotSimGuiConfig, path.join(configDir, 'simulator_config.yml'))
-  await copyFile(snobotSimPluginConfig, path.join(toFolder, 'SnobotSim.json'))
+  await copyFile(snobotSimGuiConfig, path.join(configDir, 'simulator_config.yml'));
+  await copyFile(snobotSimPluginConfig, path.join(toFolder, 'SnobotSim.json'));
 
-  if(wpilibConfig.currentLanguage === "cpp") {
+  if (wpilibLanguage === 'cpp') {
     const snobotSimGuiProperties = path.join(resourceRoot, 'cpp', 'simulator_config.properties');
     const snobotSimBuildScript = path.join(resourceRoot, 'cpp', 'snobot_sim.gradle');
 
-    await copyFile(snobotSimGuiProperties, path.join(configDir, 'simulator_config.properties'))
-    await copyFile(snobotSimBuildScript, path.join(toFolder, 'snobot_sim.gradle'))
-  } else if(wpilibConfig.currentLanguage === "java") {
-  
+    await copyFile(snobotSimGuiProperties, path.join(configDir, 'simulator_config.properties'));
+    await copyFile(snobotSimBuildScript, path.join(toFolder, 'snobot_sim.gradle'));
+  } else if (wpilibLanguage === 'java') {
+
     const snobotSimGuiProperties = path.join(resourceRoot, 'java', 'simulator_config.properties');
-    await copyFile(snobotSimGuiProperties, path.join(configDir, 'simulator_config.properties'))
-	
 
-    const add_custom_simulator = (document.getElementById('enable_custom_sim') as HTMLInputElement).checked
-    let snobotSimBuildScript = ""
-    if(add_custom_simulator) {
-		snobotSimBuildScript = path.join(resourceRoot, 'java', 'snobot_sim_with_custom.gradle');
-		const custom_simulator = path.join(resourceRoot, 'java', 'custom_robot_simulator.java');
-		const custom_sim_src_dir = path.join(projectFolder, 'src', 'custom_simulator', 'frc', 'robot')
-        await makedir(custom_sim_src_dir);
-	    await copyFile(path.join(custom_sim_src_dir, 'CustomSimulator.java'), custom_simulator)
-	} else {
-		snobotSimBuildScript = path.join(resourceRoot, 'java', 'snobot_sim.gradle');	
-	}
-	
-    let snobotSimGradleFile = await readFile(snobotSimBuildScript)
-	
-	if (use_eclipse) {
-		const eclispeConfig = await readFile(path.join(resourceRoot, 'ide_files', 'eclipse', 'snobot_sim_addon.txt'))
-		snobotSimGradleFile += eclispeConfig
+    const addCustomSimulator = (document.getElementById('enable_custom_sim') as HTMLInputElement).checked;
+    let snobotSimBuildScript = '';
+    if (addCustomSimulator) {
+        snobotSimBuildScript = path.join(resourceRoot, 'java', 'snobot_sim_with_custom.gradle');
+        const customSimulator = path.join(resourceRoot, 'java', 'custom_robot_simulator.java');
+        const customSimSrcDr = path.join(projectFolder, 'src', 'custom_simulator', 'java', 'frc', 'robot');
+        await makedir(customSimSrcDr);
+        await copyFile(customSimulator, path.join(customSimSrcDr, 'CustomRobotSimulator.java'));
 
-	}
-	
-	await writeFile(path.join(toFolder, 'snobot_sim.gradle'), snobotSimGradleFile)
-	
-	if (use_vscode) {
-	  alert("VS Code Not supported yet")
-	}
-	if (use_intellij) {
+        let propertiesFileContents = await readFile(snobotSimGuiProperties);
+        propertiesFileContents += '\nsimulator_class=frc.robot.CustomRobotSimulator';
+        await writeFile(path.join(configDir, 'simulator_config.properties'), propertiesFileContents);
+
+    } else {
+        await copyFile(snobotSimGuiProperties, path.join(configDir, 'simulator_config.properties'));
+        snobotSimBuildScript = path.join(resourceRoot, 'java', 'snobot_sim.gradle');
+    }
+
+    let snobotSimGradleFile = await readFile(snobotSimBuildScript);
+
+    if (useEclipse) {
+        const eclispeConfig = await readFile(path.join(resourceRoot, 'ide_files', 'eclipse', 'snobot_sim_addon.txt'));
+        snobotSimGradleFile += eclispeConfig;
+
+    }
+
+    await writeFile(path.join(toFolder, 'snobot_sim.gradle'), snobotSimGradleFile);
+
+    if (useVsCode) {
+      alert('VS Code Not supported yet');
+    }
+    if (useIntellij) {
       const intellijFiles = path.join(resourceRoot, 'ide_files', 'intellij');
-      await copyFile(intellijFiles, path.join(projectFolder, ".idea"))
-	}
+      await copyFile(intellijFiles, path.join(projectFolder, '.idea'));
+    }
   }
 
-  updateBuildFile(projectFolder)
+  await updateBuildFile(projectFolder);
 
   dialog.showMessageBox({
       message: 'Succesfully added SnobotSim to your project',
@@ -190,17 +197,17 @@ function validateSnobotSimFiles() {
 export async function generateProjectButtonClick() {
   const projectFolder = (document.getElementById('projectFolder') as HTMLInputElement).value;
 
-
   if (!path.isAbsolute(projectFolder)) {
     alert('Can only use an absolute path');
     return;
   }
+
   const toFolder = path.join(projectFolder, 'snobotsim');
-  const itExists = await exists(toFolder)
+  const itExists = await exists(toFolder);
 
   if (!itExists) {
-    setupSnobotSimFiles(projectFolder, toFolder)
+    await setupSnobotSimFiles(projectFolder, toFolder);
   } else {
-    validateSnobotSimFiles()
+    validateSnobotSimFiles();
   }
 }
