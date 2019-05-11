@@ -1,10 +1,19 @@
 {
+	"maven_repos": {
+		"SnobotSim": "http://raw.githubusercontent.com/pjreiniger/maven_repo/master/",
+		"Wpi": "http://first.wpi.edu/FRC/roborio/maven/release/"
+	},
+	"required_third_party": [
+		"CTRE-Phoenix",
+		"REVRobotics"
+	],
 	"snobot_sim": {
-		"version_number": "2019-1.2.0",
+		"version_number": "2019-2.0.0",
 		"libraries": {
 			"java": [
 				"com.snobot.simulator:snobot_sim_gui:${version_number}",
 				"com.snobot.simulator:snobot_sim_java:${version_number}",
+				"com.snobot.simulator:snobot_sim_joysticks:${version_number}",
 				"com.snobot.simulator:snobot_sim_utilities:${version_number}",
 				"com.snobot.simulator:adx_family:${version_number}",
 				"com.snobot.simulator:navx_simulator:${version_number}"
@@ -14,16 +23,19 @@
 				"edu.wpi.first.hal:hal-cpp:${wpilibVersion}:${nativeclassifier}@zip",
 				"com.snobot.simulator:adx_family:${version_number}:${nativeclassifier}",
 				"com.snobot.simulator:navx_simulator:${version_number}:${nativeclassifier}",
-				"edu.wpi.first.halsim:halsim_adx_gyro_accelerometer:${wpilibVersion}:${nativeclassifier}@zip"
+				"edu.wpi.first.halsim:halsim_adx_gyro_accelerometer:${wpilibVersion}:${nativeclassifier}@zip",
+				
+				"com.snobot.simulator:snobot_sim:${version_number}:${nativeclassifier}@zip",
+				"edu.wpi.first.cscore:cscore-cpp:${wpilibVersion}:${nativeclassifier}@zip",
+				"edu.wpi.first.ntcore:ntcore-cpp:${wpilibVersion}:${nativeclassifier}@zip",
+				"edu.wpi.first.wpilibc:wpilibc-cpp:${wpilibVersion}:${nativeclassifier}@zip",
+				"edu.wpi.first.cameraserver:cameraserver-cpp:${wpilibVersion}:${nativeclassifier}@zip",
+				"edu.wpi.first.thirdparty.frc2019.opencv:opencv-cpp:${wpiOpenCvVersion}:${nativeclassifier}@zip"
 			],
 			"cpp": [
-				"edu.wpi.first.wpilibc:wpilibc-cpp:${wpilibVersion}:${nativeclassifier}@zip",
-				"edu.wpi.first.ntcore:ntcore-cpp:${wpilibVersion}:${nativeclassifier}@zip",
-				"edu.wpi.first.cscore:cscore-cpp:${wpilibVersion}:${nativeclassifier}@zip",
-				"edu.wpi.first.wpiutil:wpiutil-cpp:${wpilibVersion}:${nativeclassifier}@zip",
-				"edu.wpi.first.hal:hal-cpp:${wpilibVersion}:${nativeclassifier}@zip",
-				"edu.wpi.first.cameraserver:cameraserver-cpp:${wpilibVersion}:${nativeclassifier}@zip",
-				"com.snobot.simulator:snobot_sim:${version_number}:${nativeclassifier}@zip"
+				"com.snobot.simulator:snobot_sim:${version_number}",
+				"com.snobot.simulator:adx_family:${version_number}",
+				"com.snobot.simulator:navx_simulator:${version_number}"
 			],
 			"cpp_java": [
 				"edu.wpi.first.wpilibj:wpilibj-java:${wpilibVersion}",
@@ -55,21 +67,28 @@
 				"default_version": "5.12.0",
 				"versions": {
 					"5.12.0": {
-						"version_number": "V1_RC",
+						"version_number": "5.12.0_V1_RC",
 						"libraries": {
 							"java": [ "com.snobot.simulator:ctre_sim_override:${version_number}" ],
 							"jni" : [ "com.snobot.simulator:ctre_sim_override:${version_number}:${nativeclassifier}" ]
 						}
 					},
 					"5.13.0": {
-						"version_number": "V0",
+						"version_number": "5.13.0_V0",
 						"libraries": {
 							"java": [ "com.snobot.simulator:ctre_sim_override:${version_number}" ],
 							"jni" : [ "com.snobot.simulator:ctre_sim_override:${version_number}:${nativeclassifier}" ]
 						}
 					},
 					"5.14.0": {
-						"version_number": "V0_RC",
+						"version_number": "5.14.0_V0_RC",
+						"libraries": {
+							"java": [ "com.snobot.simulator:ctre_sim_override:${version_number}" ],
+							"jni" : [ "com.snobot.simulator:ctre_sim_override:${version_number}:${nativeclassifier}" ]
+						}
+					},
+					"5.14.1": {
+						"version_number": "5.14.0_V0_RC",
 						"libraries": {
 							"java": [ "com.snobot.simulator:ctre_sim_override:${version_number}" ],
 							"jni" : [ "com.snobot.simulator:ctre_sim_override:${version_number}:${nativeclassifier}" ]
@@ -78,24 +97,24 @@
 				}
 			},
 			"REVRobotics": {
-				"default_version": "1.0.28",
+				"default_version": "1.1.9",
 				"versions": {
 					"1.0.28": {
-						"version_number": "V0",
+						"version_number": "1.0.28_V0",
 						"libraries": {
 							"java": [ "com.snobot.simulator:rev_simulator:${version_number}" ],
 							"jni" : []
 						}
 					},
 					"1.1.8": {
-						"version_number": "V0",
+						"version_number": "1.1.8_V0",
 						"libraries": {
 							"java": [ "com.snobot.simulator:rev_simulator:${version_number}" ],
 							"jni" : [ "com.snobot.simulator:rev_simulator:${version_number}:${nativeclassifier}" ]
 						}
 					},
 					"1.1.9": {
-						"version_number": "V0",
+						"version_number": "1.1.9_V0",
 						"libraries": {
 							"java": [ "com.snobot.simulator:rev_simulator:${version_number}" ],
 							"jni" : [ "com.snobot.simulator:rev_simulator:${version_number}:${nativeclassifier}" ]

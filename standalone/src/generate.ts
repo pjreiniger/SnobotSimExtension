@@ -8,7 +8,19 @@ const remote = electron.remote;
 const dialog = remote.dialog;
 
 function copyFile(source: string, dest: string) {
+    //alert("Copying from " + source + " to " + dest)
     ncp.ncp(source, dest, {}, (err) => {
+        if (err) {
+            dialog.showMessageBox({
+                message: 'error: ' + err,
+                noLink: true,
+            });
+        }
+    });
+}
+
+function writeFile(filename: string, outputText: string) {
+    fs.writeFile(filename, outputText, (err) => {
         if (err) {
             dialog.showMessageBox({
                 message: 'error: ' + err,
@@ -44,16 +56,19 @@ function updateBuildFile(projectFolder: string) {
         newgFile = newgFile.replace(getCleanedJavaDependenciesRegex(), `${snobotSimJavaApplyPlugin}$1`);
     }
 
-    fs.writeFile(buildFile, newgFile, (err) => {
-        if (err) {
-            throw err;
-        }
-    });
+    writeFile(buildFile, newgFile);
 }
 
 function setupSnobotSimFiles(projectFolder : string, toFolder : string) {
+  //const enable_custom_sim_element = document.getElementById('enable_custom_sim') as HTMLInputElement
+  const use_vscode = (document.getElementById('use_vscode') as HTMLInputElement).checked
+  const use_eclipse = (document.getElementById('use_eclipse') as HTMLInputElement).checked
+  const use_intellij = (document.getElementById('use_intellij') as HTMLInputElement).checked
+
+  const configDir = path.join(projectFolder, 'simulator_config');
 
   fs.mkdirSync(toFolder);
+  fs.mkdirSync(configDir);
 
   // Quick error checking
   const jsonFilePath = path.join(projectFolder, '.wpilib', 'wpilib_preferences.json');
@@ -75,16 +90,42 @@ function setupSnobotSimFiles(projectFolder : string, toFolder : string) {
     resourceRoot = 'resources';
   }
 
-  const snobotSimConfig = path.join(resourceRoot, 'SnobotSim.json');
-  let snobotSimBuildScript = "Invalid";
-  if(wpilibConfig.currentLanguage === "cpp") {
-      snobotSimBuildScript = path.join(resourceRoot, 'snobot_sim_cpp.gradle');
-  } else if(wpilibConfig.currentLanguage === "java") {
-      snobotSimBuildScript = path.join(resourceRoot, 'snobot_sim_java.gradle');
-  }
+  // Copy common things
+  const snobotSimPluginConfig = path.join(resourceRoot, 'shared', 'SnobotSim.json');
+  const snobotSimGuiConfig = path.join(resourceRoot, 'shared', 'simulator_config.yml');
+  copyFile(snobotSimGuiConfig, path.join(configDir, 'simulator_config.yml'))
+  copyFile(snobotSimPluginConfig, path.join(toFolder, 'SnobotSim.json'))
 
-  copyFile(snobotSimConfig, path.join(toFolder, 'SnobotSim.json'))
-  copyFile(snobotSimBuildScript, path.join(toFolder, 'snobot_sim.gradle'))
+  if(wpilibConfig.currentLanguage === "cpp") {
+    const snobotSimGuiProperties = path.join(resourceRoot, 'cpp', 'simulator_config.properties');
+    const snobotSimBuildScript = path.join(resourceRoot, 'cpp', 'snobot_sim.gradle');
+
+    copyFile(snobotSimGuiProperties, path.join(configDir, 'simulator_config.properties'))
+    copyFile(snobotSimBuildScript, path.join(toFolder, 'snobot_sim.gradle'))
+  } else if(wpilibConfig.currentLanguage === "java") {
+  
+    const snobotSimGuiProperties = path.join(resourceRoot, 'java', 'simulator_config.properties');
+    copyFile(snobotSimGuiProperties, path.join(configDir, 'simulator_config.properties'))
+	
+    const snobotSimBuildScript = path.join(resourceRoot, 'java', 'snobot_sim.gradle');
+    let snobotSimGradleFile = fs.readFileSync(snobotSimBuildScript, 'utf8')
+	
+	if (use_eclipse) {
+		const eclispeConfig = fs.readFileSync(path.join(resourceRoot, 'ide_files', 'eclipse', 'snobot_sim_addon.txt'), 'utf8')
+		snobotSimGradleFile += eclispeConfig
+
+	}
+	
+	writeFile(path.join(toFolder, 'snobot_sim.gradle'), snobotSimGradleFile)
+	
+	if (use_vscode) {
+	  alert("VS Code Not supported yet")
+	}
+	if (use_intellij) {
+      const intellijFiles = path.join(resourceRoot, 'ide_files', 'intellij');
+      copyFile(intellijFiles, path.join(projectFolder, ".idea"))
+	}
+  }
 
   updateBuildFile(projectFolder)
 
@@ -104,6 +145,7 @@ function validateSnobotSimFiles() {
 
 export function generateProjectButtonClick() {
   const projectFolder = (document.getElementById('projectFolder') as HTMLInputElement).value;
+
 
   if (!path.isAbsolute(projectFolder)) {
     alert('Can only use an absolute path');

@@ -1,0 +1,10 @@
+
+apply plugin: "eclipse"
+
+project.eclipse.classpath.file.whenMerged { classpath ->
+    classpath.entries.each {
+        if(it.path.contains("jinput")) {
+            it.setNativeLibraryLocation(project.name + "/build/tmp/snobotSimJava")
+        }
+    }
+}

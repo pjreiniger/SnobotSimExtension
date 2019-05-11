@@ -6,7 +6,7 @@
     "compile": "tsc -p ./",
     "clean": "rmdir-cli out",
     "lint": "tslint -c tslint.json -p tsconfig.json",
-    "start": "npm run compile && node_modules/electron/dist/electron.exe .",
+    "start": "npm run compile && node_modules\\electron\\dist\\electron.exe .",
     "watch": "tsc -watch -p ./",
     "packageWindows": "electron-packager . wpilibutility --platform=win32 --arch=ia32 --overwrite --out ./build",
     "packageLinux": "electron-packager . wpilibutility --platform=linux --overwrite --out ./build",
