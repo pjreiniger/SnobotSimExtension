@@ -1,7 +1,8 @@
 
 dependencies {
-    // SnobotSim
     snobotSimCompile snobotSimJava()
+
+    testCompile snobotSimJava()
 }
 
 tasks.withType(Test) {

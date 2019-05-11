@@ -16,7 +16,9 @@
 				"com.snobot.simulator:snobot_sim_joysticks:${version_number}",
 				"com.snobot.simulator:snobot_sim_utilities:${version_number}",
 				"com.snobot.simulator:adx_family:${version_number}",
-				"com.snobot.simulator:navx_simulator:${version_number}"
+				"com.snobot.simulator:navx_simulator:${version_number}",
+				
+				"edu.wpi.first.ntcore:ntcore-jni:${wpilibVersion}:${nativeclassifier}"
 			],
 			"jni": [
 				"edu.wpi.first.wpiutil:wpiutil-cpp:${wpilibVersion}:${nativeclassifier}@zip",

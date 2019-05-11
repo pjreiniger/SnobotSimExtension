@@ -107,7 +107,15 @@ function setupSnobotSimFiles(projectFolder : string, toFolder : string) {
     const snobotSimGuiProperties = path.join(resourceRoot, 'java', 'simulator_config.properties');
     copyFile(snobotSimGuiProperties, path.join(configDir, 'simulator_config.properties'))
 	
-    const snobotSimBuildScript = path.join(resourceRoot, 'java', 'snobot_sim.gradle');
+
+    const add_custom_simulator = (document.getElementById('enable_custom_sim') as HTMLInputElement).checked
+    let snobotSimBuildScript = ""
+    if(add_custom_simulator) {
+		snobotSimBuildScript = path.join(resourceRoot, 'java', 'snobot_sim_with_custom.gradle');	
+	} else {
+		snobotSimBuildScript = path.join(resourceRoot, 'java', 'snobot_sim.gradle');	
+	}
+	
     let snobotSimGradleFile = fs.readFileSync(snobotSimBuildScript, 'utf8')
 	
 	if (use_eclipse) {
