@@ -21,6 +21,38 @@ jobs:
         testResultsFiles: '**/TEST-*.xml'
         tasks: 'build'
 
+    - script: |
+        npm install
+      workingDirectory: $(Build.SourcesDirectory)/standalone
+      displayName: 'npm install'
+
+    - script: |
+        npm run compile
+      workingDirectory: $(Build.SourcesDirectory)/standalone
+      displayName: 'npm compile'
+
+    - script: |
+        npm run lint
+      workingDirectory: $(Build.SourcesDirectory)/standalone
+      displayName: 'npm lint'
+
+    - script: |
+        npm run packageLinux
+      workingDirectory: $(Build.SourcesDirectory)/standalone
+      displayName: 'npm package'
+
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: $(Build.SourcesDirectory)/standalone/build/snobotsim_utility-linux-x64
+        includeRootFolder: false
+        archiveType: 'tar'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/snobotsim_utility-linux.tar.gz'
+        replaceExistingArchive: true
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        artifactName: 'Linux'
+
  - job: Windows_Standalone
    pool:
     vmImage: 'vs2017-win2016'
@@ -42,30 +74,37 @@ jobs:
         publishJUnitResults: false
         testResultsFiles: '**/TEST-*.xml'
         tasks: 'build'
-        options: '-PjenkinsBuild'
 
- - job: Windows_VSIX
-   pool:
-    vmImage: 'vs2017-win2016'
+    - script: |
+        npm install
+      workingDirectory: $(Build.SourcesDirectory)/standalone
+      displayName: 'npm install'
 
-   steps:
-    - task: NodeTool@0
+    - script: |
+        npm run compile
+      workingDirectory: $(Build.SourcesDirectory)/standalone
+      displayName: 'npm compile'
+
+    - script: |
+        npm run lint
+      workingDirectory: $(Build.SourcesDirectory)/standalone
+      displayName: 'npm lint'
+
+    - script: |
+        npm run packageWindows
+      workingDirectory: $(Build.SourcesDirectory)/standalone
+      displayName: 'npm package'
+
+    - task: ArchiveFiles@2
       inputs:
-        versionSpec: '8.x'
-      displayName: 'Install Node.js'
+        rootFolderOrFile: $(Build.SourcesDirectory)/standalone/build/snobotsim_utility-win32-ia32
+        includeRootFolder: false
+        archiveFile: '$(Build.ArtifactStagingDirectory)/snobotsim_utility-windows.zip'
+        replaceExistingArchive: true
 
-    - task: Gradle@2
+    - task: PublishBuildArtifacts@1
       inputs:
-        workingDirectory: ''
-        gradleWrapperFile: 'gradlew'
-        gradleOptions: '-Xmx3072m'
-        javaHomeOption: 'JDKVersion'
-        jdkVersionOption: '1.8'
-        jdkArchitectureOption: 'x64'
-        publishJUnitResults: false
-        testResultsFiles: '**/TEST-*.xml'
-        tasks: 'build'
-        options: '-PjenkinsBuild'
+        artifactName: 'WindowsStandalone'
 
  - job: Mac
    pool:
@@ -88,4 +127,57 @@ jobs:
         publishJUnitResults: false
         testResultsFiles: '**/TEST-*.xml'
         tasks: 'build'
-        options: '-PjenkinsBuild'
+
+    - script: |
+        npm install
+      workingDirectory: $(Build.SourcesDirectory)/standalone
+      displayName: 'npm install'
+
+    - script: |
+        npm run compile
+      workingDirectory: $(Build.SourcesDirectory)/standalone
+      displayName: 'npm compile'
+
+    - script: |
+        npm run lint
+      workingDirectory: $(Build.SourcesDirectory)/standalone
+      displayName: 'npm lint'
+
+    - script: |
+        npm run packageMac
+      workingDirectory: $(Build.SourcesDirectory)/standalone
+      displayName: 'npm package'
+
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: $(Build.SourcesDirectory)/standalone/build/snobotsim_utility-darwin-x64
+        includeRootFolder: false
+        archiveType: 'tar'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/snobotsim_utility-mac.tar.gz'
+        replaceExistingArchive: true
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        artifactName: 'Mac'
+
+ - job: Windows_VSIX
+   pool:
+    vmImage: 'vs2017-win2016'
+
+   steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '8.x'
+      displayName: 'Install Node.js'
+
+    - task: Gradle@2
+      inputs:
+        workingDirectory: ''
+        gradleWrapperFile: 'gradlew'
+        gradleOptions: '-Xmx3072m'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.8'
+        jdkArchitectureOption: 'x64'
+        publishJUnitResults: false
+        testResultsFiles: '**/TEST-*.xml'
+        tasks: 'build'
