@@ -8,9 +8,9 @@
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "start": "npm run compile && node_modules\\electron\\dist\\electron.exe .",
     "watch": "tsc -watch -p ./",
-    "packageWindows": "electron-packager . wpilibutility --platform=win32 --arch=ia32 --overwrite --out ./build",
-    "packageLinux": "electron-packager . wpilibutility --platform=linux --overwrite --out ./build",
-    "packageMac": "electron-packager . wpilibutility --platform=darwin --overwrite --out ./build"
+    "packageWindows": "electron-packager . snobotsim_utility --platform=win32 --arch=ia32 --overwrite --out ./build",
+    "packageLinux": "electron-packager . snobotsim_utility --platform=linux --overwrite --out ./build",
+    "packageMac": "electron-packager . snobotsim_utility --platform=darwin --overwrite --out ./build"
   },
   "main": "out/main.js",
   "repository": {
