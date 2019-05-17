@@ -5,22 +5,32 @@
     "description": "SnobotSim setup utility",
     "version": "0.0.0",
     "engines": {
-        "vscode": "^1.34.0"
+        "vscode": "^1.27.0"
     },
     "categories": [
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.helloWorld"
+        "onCommand:snobotsim.setupProject"
     ],
     "main": "./out/extension.js",
     "contributes": {
         "commands": [
             {
-                "command": "extension.helloWorld",
-                "title": "Hello World"
+                "command": "snobotsim.setupProject",
+                "title": "%snobotsim.setupProject.title%",
+                "category": "SnobotSim"
             }
-        ]
+        ],
+        "menus": {
+            "explorer/context": [
+                {
+                    "when": "resourceFilename == build.gradle",
+                    "command": "snobotsim.setupProject",
+                    "group": "wpilib"
+                }
+            ]
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
