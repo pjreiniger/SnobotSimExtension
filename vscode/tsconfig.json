@@ -1,10 +1,11 @@
 {
 	"compilerOptions": {
 		"module": "commonjs",
-		"target": "es6",
+		"target": "es2017",
 		"outDir": "out",
 		"lib": [
-			"es6"
+			"es2017",
+            "dom"
 		],
 		"sourceMap": true,
 		"rootDir": "src",
@@ -16,6 +17,8 @@
 	},
 	"exclude": [
 		"node_modules",
-		".vscode-test"
+		".vscode-test",
+        "out",
+        "resources"
 	]
 }
