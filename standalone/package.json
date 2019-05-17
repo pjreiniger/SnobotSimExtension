@@ -1,7 +1,9 @@
 {
   "name": "standalone",
-  "version": "0.0.0",
+  "author": "pjreiniger",
   "description": "SnobotSim setup utility",
+  "version": "0.0.0",
+  "license": "MIT",
   "scripts": {
     "compile": "tsc -p ./",
     "clean": "rmdir-cli out",
@@ -18,8 +20,6 @@
     "url": "https://github.com/pjreiniger/SnobotSimExtension"
   },
   "keywords": [],
-  "author": "pjreiniger",
-  "license": "MIT",
   "devDependencies": {
     "@types/glob": "^7.1.1",
     "@types/mkdirp": "^0.5.2",
