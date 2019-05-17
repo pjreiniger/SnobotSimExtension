@@ -270,3 +270,9 @@ gradle-app.setting
 **/build/
 
 # End of https://www.gitignore.io/api/node,gradle,eclipse,intellij,visualstudiocode
+
+
+
+# My stuff
+standalone/src/shared
+vscode/src/shared
