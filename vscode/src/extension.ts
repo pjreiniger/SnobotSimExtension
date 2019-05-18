@@ -13,31 +13,50 @@ export async function activate(context: vscode.ExtensionContext) {
         // Display a message box to the user
         vscode.window.showInformationMessage('Hello World!');
         
-        const panel = vscode.window.createWebviewPanel('x', 'y', vscode.ViewColumn.One, {}) 
-        {
-
-        }
-        // And set its HTML content
-        try {
-            panel.webview.html = await getWebviewContent(context);
-        }
-        catch(err) {
-            
-        }
+        await displayWebView(context, vscode.ViewColumn.Active, true, {
+            enableScripts: true,
+            retainContextWhenHidden: true,
+          });
     });
     context.subscriptions.push(disposable);
 }
+
+async function displayWebView(context: vscode.ExtensionContext, showOptions: vscode.ViewColumn | { preserveFocus: boolean, viewColumn: vscode.ViewColumn },
+    reveal?: boolean, options?: vscode.WebviewPanelOptions & vscode.WebviewOptions) {
+
+    let webview = vscode.window.createWebviewPanel("View Type", "Title", showOptions, options);
+    webview.webview.html = await getWebviewContent(context);
+    
+    webview.webview.onDidReceiveMessage(async (data: any) => {
+        console.log("Got something ")
+        console.log("Got something " + data)
+        console.log("Got something " + data.type)
+
+        if(data.type == "createProject") {
+
+        }
+    });
+
+    if (reveal) {
+        webview.reveal();
+    }
+}
+
 
 
 async function getWebviewContent(context: vscode.ExtensionContext) {
     let html = await readFile(path.join(context.extensionPath, 'resources', 'index.html'));
     
-    const scriptOnDisk = vscode.Uri.file(path.join(context.extensionPath, 'resources', 'dist', 'snobotSimUpdator.js'));
+    const scriptOnDisk = vscode.Uri.file(path.join(context.extensionPath, 'resources', 'dist', 'snobotSimUpdaterPage.js'));
+    console.log('dfjlskfj ' + context.extensionPath)
+    console.log('dfjlskfj ' + path.join(context.extensionPath, 'resources', 'dist', 'snobotSimUpdaterPage.js'))
+    console.log('dfjlskfj ' + scriptOnDisk)
     const scriptResourcePath = scriptOnDisk.with({ scheme: 'vscode-resource' });
     html += '\r\n<script src="';
     html += scriptResourcePath.toString();
     html += '">\r\n';
     html += '\r\n</script>\r\n';
+    console.log(html)
 
     return html
 }

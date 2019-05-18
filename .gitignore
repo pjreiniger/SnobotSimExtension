@@ -274,5 +274,4 @@ gradle-app.setting
 
 
 # My stuff
-standalone/src/shared
-vscode/src/shared
+vscode/resources/dist
