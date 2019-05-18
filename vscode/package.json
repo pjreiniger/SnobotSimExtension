@@ -32,7 +32,7 @@
                 {
                     "when": "resourceFilename == build.gradle",
                     "command": "snobotsim.setupProject",
-                    "group": "wpilib"
+                    "group": "SnobotSim"
                 }
             ]
         }
