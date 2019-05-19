@@ -160,7 +160,7 @@ jobs:
       inputs:
         artifactName: 'Mac'
 
- - job: Windows_VSIX
+ - job: VSIX
    pool:
     vmImage: 'vs2017-win2016'
 
@@ -181,3 +181,33 @@ jobs:
         publishJUnitResults: false
         testResultsFiles: '**/TEST-*.xml'
         tasks: 'build'
+
+    - script: |
+        npm install
+      workingDirectory: $(Build.SourcesDirectory)/vscode
+      displayName: 'npm install'
+
+    - script: |
+        npm run lint
+      workingDirectory: $(Build.SourcesDirectory)/vscode
+      displayName: 'npm lint'
+
+    - script: |
+        npm run webpack
+      workingDirectory: $(Build.SourcesDirectory)/vscode
+      displayName: 'npm webpack'
+
+    - script: |
+        npm run vscePackage
+      workingDirectory: $(Build.SourcesDirectory)/vscode
+      displayName: 'npm package'
+
+    - task: CopyFiles@2
+      inputs:
+        contents: '**\*.vsix'
+        targetFolder: $(Build.ArtifactStagingDirectory)
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        artifactName: 'VSIX'
+        
