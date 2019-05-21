@@ -1,18 +1,18 @@
 import * as fs from 'fs';
-// import * as mkdirp from 'mkdirp';
-// import * as ncp from 'ncp';
+import * as mkdirp from 'mkdirp';
+import * as ncp from 'ncp';
 
-// export function copyFile(source: string, dest: string): Promise<void> {
-//     return new Promise<void>((resolve, reject) => {
-//       ncp.ncp(source, dest, {}, (err) => {
-//         if (err) {
-//           reject(err);
-//         }
-//         resolve();
-//       });
-//     });
-// }
-//
+export function copyFile(source: string, dest: string): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      ncp.ncp(source, dest, {}, (err) => {
+        if (err) {
+          reject(err);
+        }
+        resolve();
+      });
+    });
+}
+
 export function writeFile(filename: string, contents: string): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     fs.writeFile(filename, contents, 'utf8', (err) => {
@@ -25,19 +25,19 @@ export function writeFile(filename: string, contents: string): Promise<void> {
   });
 }
 
-//
-// export function makedir(directory: string): Promise<void> {
-//   return new Promise<void>((resolve, reject) => {
-//     mkdirp(directory, (err) => {
-//       if (err) {
-//         reject(err);
-//       } else {
-//         resolve();
-//       }
-//     });
-//   });
-// }
-//
+
+export function makedir(directory: string): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    mkdirp(directory, (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
 export function readFile(filename: string): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     fs.readFile(filename, 'utf8', (err, data) => {
@@ -58,14 +58,3 @@ export function exists(filename: string): Promise<boolean> {
   });
 }
 
-export function copyFile({}, {}): Promise<void> {
-    return new Promise<void>((resolve, {}) => {
-        resolve();
-    });
-}
-
-export function makedir({}): Promise<void> {
-    return new Promise<void>((resolve, {}) => {
-        resolve();
-    });
-}

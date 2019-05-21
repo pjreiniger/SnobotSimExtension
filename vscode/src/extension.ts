@@ -11,9 +11,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
     const disposable = vscode.commands.registerCommand('snobotsim.setupProject', async () => {
 
-        // Display a message box to the user
-        vscode.window.showInformationMessage('Hello World!');
-
         await displayWebView(context, vscode.ViewColumn.Active, true, {
             enableScripts: true,
             retainContextWhenHidden: true,
@@ -25,7 +22,7 @@ export async function activate(context: vscode.ExtensionContext) {
 async function displayWebView(context: vscode.ExtensionContext, showOptions: vscode.ViewColumn | { preserveFocus: boolean, viewColumn: vscode.ViewColumn },
                               reveal?: boolean, options?: vscode.WebviewPanelOptions & vscode.WebviewOptions) {
 
-    const webview = vscode.window.createWebviewPanel('View Type', 'Title', showOptions, options);
+    const webview = vscode.window.createWebviewPanel('View Type', 'Configure SnobotSim', showOptions, options);
     webview.webview.html = await getWebviewContent(context);
 
     webview.webview.onDidReceiveMessage(async (data: any) => {
