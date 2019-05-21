@@ -25,7 +25,6 @@ export function writeFile(filename: string, contents: string): Promise<void> {
   });
 }
 
-
 export function makedir(directory: string): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     mkdirp(directory, (err) => {
@@ -57,4 +56,3 @@ export function exists(filename: string): Promise<boolean> {
     });
   });
 }
-

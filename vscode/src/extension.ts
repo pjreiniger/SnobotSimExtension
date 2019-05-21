@@ -33,7 +33,12 @@ async function displayWebView(context: vscode.ExtensionContext, showOptions: vsc
             const useEclipse = data.data.use_eclipse;
             const useIntellij = data.data.use_intellij;
             const basepath = context.extensionPath;
-            const projectFolder = data.data.projectFolder;
+            if (vscode.workspace.workspaceFolders === undefined) {
+                return;
+            }
+            const projectFolder = vscode.workspace.workspaceFolders[0].uri.fsPath;
+
+            vscode.window.showInformationMessage('Adding SnobotSim config to ' + projectFolder);
 
             const toFolder = path.join(projectFolder, 'snobotsim');
             if (!await exists(toFolder)) {
