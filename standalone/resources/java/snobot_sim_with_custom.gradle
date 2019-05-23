@@ -1,0 +1,24 @@
+
+sourceSets {
+    simulatorExtensions
+    {
+        java {
+            srcDirs += ["src/custom_simulator/java"]
+        }
+    }
+}
+
+dependencies {
+    snobotSimCompile snobotSimJava()
+
+    simulatorExtensionsCompile snobotSimJava()
+    simulatorExtensionsCompile wpi.deps.wpilib()
+    simulatorExtensionsCompile sourceSets.main.output
+
+    testCompile snobotSimJava()
+    testCompile sourceSets.simulatorExtensions.output
+}
+
+tasks.withType(Test) {
+    systemProperty "java.library.path", "$rootDir/build/tmp/snobotSimJava"
+}

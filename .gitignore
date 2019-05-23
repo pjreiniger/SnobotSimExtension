@@ -270,3 +270,15 @@ gradle-app.setting
 **/build/
 
 # End of https://www.gitignore.io/api/node,gradle,eclipse,intellij,visualstudiocode
+
+
+
+# My stuff
+vscode/resources
+*.vsix
+
+
+// These files will be generated from the i18n folder
+*nls.*.json
+
+

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>SnobotSim Installer</title>
+  <script>
+    const exports = require('./out/generate.js');
+  </script>
+</head>
+
+<body>
+
+  <br/> Select the folder the project lives in.
+  <input id="projectFolder" type="text" value="F:/git/FIRST/SnobotSim/temp/TestVsCodeExtension/TestVsCodeExtension" style="width: 100%; margin-top: 10px; margin-bottom: 10px" />
+
+  <br/> Set your fully-qualified robot class
+  <input id="robotName" type="text" value="frc.robot.Robot", style="width: 100%; margin-top: 10px; margin-bottom: 10px" />
+
+  <input id="enable_custom_sim" type="checkbox" name="enable_custom_sim">Create custom simulator stubs<br>
+
+  <fieldset>
+    <legend>Enabled IDE configurations:</legend>      
+    <input id="use_vscode" type="checkbox" name="ide_configs" value="vs_code">VS Code<br>
+    <input id="use_eclipse" type="checkbox" name="ide_configs" value="eclipse" checked>Eclipse<br>
+    <input id="use_intellij" type="checkbox" name="ide_configs" value="intellij" checked>Intellij<br>
+  </fieldset>      
+
+  <button id="generateProject" onclick="exports.generateProjectButtonClick()">Generate Project</button>
+
+</body>
+
+</html>
