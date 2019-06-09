@@ -30,7 +30,7 @@
     "electron": "^3.0.12",
     "electron-packager": "^13.1.0",
     "rmdir-cli": "^2.0.6",
-    "tslint": "^5.11.0",
+    "tslint": "^5.17.0",
     "typescript": "^3.2.2"
   },
   "dependencies": {
