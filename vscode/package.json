@@ -60,7 +60,7 @@
         "@types/xml2js": "^0.4.3",
         "copy-webpack-plugin": "^4.6.0",
         "del": "^3.0.0",
-        "event-stream": "=3.3.4",
+        "event-stream": "=4.0.1",
         "gulp": "^4.0.0",
         "gulp-filter": "^5.1.0",
         "gulp-json-transform": "^0.4.5",
