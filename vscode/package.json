@@ -83,7 +83,7 @@
         "glob": "^7.1.4",
         "java-properties": "^0.2.10",
         "jsonc-parser": "^2.0.2",
-        "logform": "^1.10.0",
+        "logform": "^2.1.2",
         "mkdirp": "^0.5.1",
         "ncp": "^2.0.0",
         "node-fetch": "^2.3.0",
