@@ -2,7 +2,7 @@ import { app, BrowserWindow } from 'electron';
 
 let mainWindow: Electron.BrowserWindow | undefined;
 
-function createWindow() {
+async function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     backgroundColor: '#2e2c29',
@@ -11,7 +11,7 @@ function createWindow() {
     width: 350,
   });
 
-  mainWindow.loadFile('index.html');
+  await mainWindow.loadFile('index.html');
 
   mainWindow.setMenu(null);
 
