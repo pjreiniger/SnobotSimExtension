@@ -31,7 +31,7 @@
     "electron-packager": "^14.0.3",
     "rmdir-cli": "^2.0.6",
     "tslint": "^5.18.0",
-    "typescript": "^3.5.2"
+    "typescript": "^3.6.3"
   },
   "dependencies": {
     "glob": "^7.1.3",
