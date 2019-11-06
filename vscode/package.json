@@ -72,7 +72,7 @@
         "ts-loader": "^6.0.4",
         "ts-node": "^8.3.0",
         "tslint": "^5.18.0",
-        "typescript": "^3.5.3",
+        "typescript": "^3.7.2",
         "vsce": "^1.66.0",
         "vscode": "^1.1.33",
         "vscode-nls-dev": "^3.3.1",
