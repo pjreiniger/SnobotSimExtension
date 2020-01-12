@@ -80,7 +80,7 @@
         "webpack-cli": "^3.3.10"
     },
     "dependencies": {
-        "glob": "^7.1.4",
+        "glob": "^7.1.6",
         "java-properties": "^1.0.2",
         "jsonc-parser": "^2.2.0",
         "logform": "^2.1.2",
