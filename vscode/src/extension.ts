@@ -27,9 +27,22 @@ export async function activate(context: vscode.ExtensionContext) {
         const projectFolder = vscode.workspace.workspaceFolders[0].uri.fsPath;
         await gradleRun("updateSnobotSimConfig", projectFolder, vscode.workspace.workspaceFolders[0], "Update Snobot Sim");
 
-        vscode.window.showInfoMessage('Updating SnobotSim');
+        vscode.window.showInformationMessage('Updating SnobotSim');
     });
     context.subscriptions.push(updateSnobotSimDisposable);
+    
+    const runJavaSnobotSimDisposable = vscode.commands.registerCommand('snobotsim.runJavaSnobotSim', async () => {
+        
+        if (vscode.workspace.workspaceFolders === undefined) {
+            vscode.window.showErrorMessage('SnobotSim extension is too dumb to handle undefined workspaces');
+            return;
+        }
+        const projectFolder = vscode.workspace.workspaceFolders[0].uri.fsPath;
+        await gradleRun("runJavaSnobotSim", projectFolder, vscode.workspace.workspaceFolders[0], "Run Java Snobot Sim");
+
+        vscode.window.showInformationMessage('Starting SnobotSim');
+    });
+    context.subscriptions.push(runJavaSnobotSimDisposable);
 }
 
 export async function gradleRun(args: string, 
