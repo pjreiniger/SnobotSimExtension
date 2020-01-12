@@ -18,7 +18,8 @@
     "activationEvents": [
         "workspaceContains:.wpilib/wpilib_preferences.json",
         "workspaceContains:build/vscodeconfig.json",
-        "onCommand:snobotsim.setupProject"
+        "onCommand:snobotsim.setupProject",
+        "onCommand:snobotsim.updateSnobotSim"
     ],
     "main": "./out/extension.js",
     "contributes": {
@@ -27,6 +28,11 @@
                 "command": "snobotsim.setupProject",
                 "title": "%snobotsim.setupProject.title%",
                 "category": "SnobotSim"
+            },
+            {
+                "command": "snobotsim.updateSnobotSim",
+                "title": "%snobotsim.updateSnobotSim.title%",
+                "category": "SnobotSim"
             }
         ],
         "menus": {
@@ -34,6 +40,11 @@
                 {
                     "when": "resourceFilename == build.gradle",
                     "command": "snobotsim.setupProject",
+                    "group": "SnobotSim"
+                },
+                {
+                    "when": "resourceFilename == build.gradle",
+                    "command": "snobotsim.updateSnobotSim",
                     "group": "SnobotSim"
                 }
             ]
