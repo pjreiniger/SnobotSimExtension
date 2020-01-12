@@ -17,41 +17,40 @@ export async function activate(context: vscode.ExtensionContext) {
           });
     });
     context.subscriptions.push(setupSnobotDisposable);
-    
+
     const updateSnobotSimDisposable = vscode.commands.registerCommand('snobotsim.updateSnobotSim', async () => {
-        
+
         if (vscode.workspace.workspaceFolders === undefined) {
             vscode.window.showErrorMessage('SnobotSim extension is too dumb to handle undefined workspaces');
             return;
         }
         const projectFolder = vscode.workspace.workspaceFolders[0].uri.fsPath;
-        await gradleRun("updateSnobotSimConfig", projectFolder, vscode.workspace.workspaceFolders[0], "Update Snobot Sim");
+        await gradleRun('updateSnobotSimConfig', projectFolder, vscode.workspace.workspaceFolders[0], 'Update Snobot Sim');
 
         vscode.window.showInformationMessage('Updating SnobotSim');
     });
     context.subscriptions.push(updateSnobotSimDisposable);
-    
+
     const runJavaSnobotSimDisposable = vscode.commands.registerCommand('snobotsim.runJavaSnobotSim', async () => {
-        
+
         if (vscode.workspace.workspaceFolders === undefined) {
             vscode.window.showErrorMessage('SnobotSim extension is too dumb to handle undefined workspaces');
             return;
         }
         const projectFolder = vscode.workspace.workspaceFolders[0].uri.fsPath;
-        await gradleRun("runJavaSnobotSim", projectFolder, vscode.workspace.workspaceFolders[0], "Run Java Snobot Sim");
+        await gradleRun('runJavaSnobotSim', projectFolder, vscode.workspace.workspaceFolders[0], 'Run Java Snobot Sim');
 
         vscode.window.showInformationMessage('Starting SnobotSim');
     });
     context.subscriptions.push(runJavaSnobotSimDisposable);
 }
 
-export async function gradleRun(args: string, 
-                                rootDir: string, 
-                                workspace: vscode.WorkspaceFolder, 
+export async function gradleRun(args: string,
+                                rootDir: string,
+                                workspace: vscode.WorkspaceFolder,
                                 name: string) {
 
-    let command = './gradlew ' + args;
-
+    const command = './gradlew ' + args;
     await executeCommand(command, name, rootDir, workspace);
 }
 
@@ -60,12 +59,12 @@ function getIsWindows(): boolean {
     return nodePlatform === 'win32';
   }
 
-async function executeCommand(command: string, 
-                              name: string, 
-                              rootDir: string, 
+async function executeCommand(command: string,
+                              name: string,
+                              rootDir: string,
                               workspace: vscode.WorkspaceFolder) {
     const shell = new vscode.ShellExecution(command, {
-        cwd: rootDir
+        cwd: rootDir,
     });
 
     if (getIsWindows()) {
@@ -84,8 +83,7 @@ async function executeCommand(command: string,
     await vscode.tasks.executeTask(task);
 }
 
-async function displayConfigureSnobotSim(context: vscode.ExtensionContext, showOptions: vscode.ViewColumn | { preserveFocus: boolean, viewColumn: vscode.ViewColumn },
-                              reveal?: boolean, options?: vscode.WebviewPanelOptions & vscode.WebviewOptions) {
+async function displayConfigureSnobotSim(context: vscode.ExtensionContext, showOptions: vscode.ViewColumn | { preserveFocus: boolean, viewColumn: vscode.ViewColumn }, reveal?: boolean, options?: vscode.WebviewPanelOptions & vscode.WebviewOptions) {
 
     const webview = vscode.window.createWebviewPanel('View Type', 'Configure SnobotSim', showOptions, options);
     webview.webview.html = await getWebviewContent(context);
