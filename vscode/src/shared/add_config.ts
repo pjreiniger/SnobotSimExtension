@@ -16,7 +16,7 @@ function getCleanedJavaDependenciesRegex() {
 
 async function updateBuildFile(projectFolder: string) {
     const buildFile = path.join(projectFolder, 'build.gradle');
-    const snobotSimPluginText = '\n    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2019-3.0.0" apply false';
+    const snobotSimPluginText = '\n    id "com.snobot.simulator.plugin.SnobotSimulatorPlugin" version "2020-0.0.0" apply false';
     // tslint:disable-next-line
     const snobotSimJavaApplyPlugin = '//////////////////////////////////\n// SnobotSim\n//////////////////////////////////\napply plugin: com.snobot.simulator.plugin.SnobotSimulatorPlugin\napply from: "snobotsim/snobot_sim.gradle"\n//////////////////////////////////\n\n';
     const gradleBuildFile = await readFile(buildFile);

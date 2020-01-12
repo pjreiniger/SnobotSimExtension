@@ -9,18 +9,81 @@ import { exists, readFile } from './shared/file_utils';
 // your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
 
-    const disposable = vscode.commands.registerCommand('snobotsim.setupProject', async () => {
+    const setupSnobotDisposable = vscode.commands.registerCommand('snobotsim.setupProject', async () => {
 
-        await displayWebView(context, vscode.ViewColumn.Active, true, {
+        await displayConfigureSnobotSim(context, vscode.ViewColumn.Active, true, {
             enableScripts: true,
             retainContextWhenHidden: true,
           });
     });
-    context.subscriptions.push(disposable);
+    context.subscriptions.push(setupSnobotDisposable);
+
+    const updateSnobotSimDisposable = vscode.commands.registerCommand('snobotsim.updateSnobotSim', async () => {
+
+        if (vscode.workspace.workspaceFolders === undefined) {
+            vscode.window.showErrorMessage('SnobotSim extension is too dumb to handle undefined workspaces');
+            return;
+        }
+        const projectFolder = vscode.workspace.workspaceFolders[0].uri.fsPath;
+        await gradleRun('updateSnobotSimConfig', projectFolder, vscode.workspace.workspaceFolders[0], 'Update Snobot Sim');
+
+        vscode.window.showInformationMessage('Updating SnobotSim');
+    });
+    context.subscriptions.push(updateSnobotSimDisposable);
+
+    const runJavaSnobotSimDisposable = vscode.commands.registerCommand('snobotsim.runJavaSnobotSim', async () => {
+
+        if (vscode.workspace.workspaceFolders === undefined) {
+            vscode.window.showErrorMessage('SnobotSim extension is too dumb to handle undefined workspaces');
+            return;
+        }
+        const projectFolder = vscode.workspace.workspaceFolders[0].uri.fsPath;
+        await gradleRun('runJavaSnobotSim', projectFolder, vscode.workspace.workspaceFolders[0], 'Run Java Snobot Sim');
+
+        vscode.window.showInformationMessage('Starting SnobotSim');
+    });
+    context.subscriptions.push(runJavaSnobotSimDisposable);
 }
 
-async function displayWebView(context: vscode.ExtensionContext, showOptions: vscode.ViewColumn | { preserveFocus: boolean, viewColumn: vscode.ViewColumn },
-                              reveal?: boolean, options?: vscode.WebviewPanelOptions & vscode.WebviewOptions) {
+export async function gradleRun(args: string,
+                                rootDir: string,
+                                workspace: vscode.WorkspaceFolder,
+                                name: string) {
+
+    const command = './gradlew ' + args;
+    await executeCommand(command, name, rootDir, workspace);
+}
+
+function getIsWindows(): boolean {
+    const nodePlatform: NodeJS.Platform = process.platform;
+    return nodePlatform === 'win32';
+  }
+
+async function executeCommand(command: string,
+                              name: string,
+                              rootDir: string,
+                              workspace: vscode.WorkspaceFolder) {
+    const shell = new vscode.ShellExecution(command, {
+        cwd: rootDir,
+    });
+
+    if (getIsWindows()) {
+        if (command.startsWith('./')) {
+            command = command.substring(2);
+        }
+        shell.commandLine = command;
+        if (shell.options !== undefined) {
+            shell.options.executable = 'cmd.exe';
+            shell.options.shellArgs = ['/d', '/c'];
+        }
+    }
+
+    const task = new vscode.Task({ type: 'wpilibgradle' }, workspace, name, 'wpilib', shell);
+    task.presentationOptions.echo = true;
+    await vscode.tasks.executeTask(task);
+}
+
+async function displayConfigureSnobotSim(context: vscode.ExtensionContext, showOptions: vscode.ViewColumn | { preserveFocus: boolean, viewColumn: vscode.ViewColumn }, reveal?: boolean, options?: vscode.WebviewPanelOptions & vscode.WebviewOptions) {
 
     const webview = vscode.window.createWebviewPanel('View Type', 'Configure SnobotSim', showOptions, options);
     webview.webview.html = await getWebviewContent(context);
