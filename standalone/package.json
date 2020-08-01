@@ -36,7 +36,7 @@
   "dependencies": {
     "glob": "^7.1.6",
     "java-properties": "^1.0.2",
-    "jsonc-parser": "^2.2.0",
+    "jsonc-parser": "^2.3.0",
     "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
     "temp": "^0.9.1",
