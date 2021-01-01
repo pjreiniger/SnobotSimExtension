@@ -114,7 +114,7 @@
         "vscode-cpptools": "3.1.0",
         "vscode-jsonrpc": "^4.0.0",
         "vscode-nls": "^4.1.1",
-        "vscode-wpilibapi": "^2019.3.1",
+        "vscode-wpilibapi": "^2021.1.1",
         "winston": "^3.2.1",
         "winston-transport": "^4.3.0",
         "wpilib-riolog": "^0.2.0",
